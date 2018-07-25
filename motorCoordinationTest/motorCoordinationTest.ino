@@ -12,6 +12,10 @@ int enableMotor2 = 3;
 int input3 = 2;
 int input4 = 4;
 
+const unsigned int Y_IN = A0;
+const unsigned int X_IN = A1;
+const unsigned int K_IN = A2;
+
 void initMotors() {
   Serial.println("Initialize and enable Motor 1 and 2");
   pinMode(enableMotor1, OUTPUT);
@@ -93,9 +97,29 @@ void forward() {
 
 void backward() {
   Serial.println("Backward");
+  delay(1000);
+}
+
+void motorStop() {
+  Serial.println("Both motor full stop");
+  motor1Stop();
+  motor2Stop();
+  delay(1000);
 }
 
 void loop() {
+  int joystickY = analogRead(Y_IN);
+  Serial.print("joystick y = ");
+  Serial.println(joystickY);
+  delay(50);
+  if (joystickY < 50) {
+    forward();
+  } else if (joystickY > 1000) {
+    backward();
+  } else {
+    motorStop();
+  }
+  
   if (Serial.available() > 0) {
     int command = Serial.read();
     if (command == '1') {
@@ -103,8 +127,7 @@ void loop() {
     } else if (command == '2') {
       backward();
     } else { // Default to STOP
-      motor1Stop();
-      motor2Stop();
+      motorStop();
     }
   }
 }

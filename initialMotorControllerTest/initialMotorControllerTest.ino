@@ -7,8 +7,8 @@
  * 3. Attach a new motor to one of the motor output and run the test again
  */
 
-int enableMotor1 = 5;
-int input1 = 6;
+int enableMotor1 = 6;
+int input1 = 5;
 int input2 = 7;
 
 void setup() {

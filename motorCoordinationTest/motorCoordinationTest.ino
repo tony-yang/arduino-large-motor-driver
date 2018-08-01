@@ -4,9 +4,9 @@
  * Experiment with moving two motors in coordiation
  */
 
-int enableMotor1 = 5;
-int input1 = 6;
-int input2 = 7;
+const unsigned int enableMotor1 = 5;
+const unsigned int input1 = 6;
+const unsigned int input2 = 7;
 
 int enableMotor2 = 3;
 int input3 = 2;
@@ -29,6 +29,8 @@ void initMotors() {
 
 void initPosition() {
   Serial.println("Calibrate initial motor position");
+  digitalWrite(enableMotor1, HIGH);
+  digitalWrite(enableMotor2, HIGH);
   motor1Forward();
   motor2Forward();
   delay(4000);
@@ -36,6 +38,8 @@ void initPosition() {
   motor2Backward();
   delay(1000);
   motor2Stop();
+  digitalWrite(enableMotor1, LOW);
+  digitalWrite(enableMotor2, LOW);
 }
 
 void setup() {
@@ -113,21 +117,33 @@ void loop() {
   Serial.println(joystickY);
   delay(50);
   if (joystickY < 50) {
+    digitalWrite(enableMotor1, HIGH);
+    digitalWrite(enableMotor2, HIGH);
     forward();
   } else if (joystickY > 1000) {
+    digitalWrite(enableMotor1, HIGH);
+    digitalWrite(enableMotor2, HIGH);
     backward();
   } else {
     motorStop();
+    digitalWrite(enableMotor1, LOW);
+    digitalWrite(enableMotor2, LOW);
   }
   
   if (Serial.available() > 0) {
     int command = Serial.read();
     if (command == '1') {
+      digitalWrite(enableMotor1, HIGH);
+      digitalWrite(enableMotor2, HIGH);
       forward();
     } else if (command == '2') {
+      digitalWrite(enableMotor1, HIGH);
+      digitalWrite(enableMotor2, HIGH);
       backward();
     } else { // Default to STOP
       motorStop();
+      digitalWrite(enableMotor1, LOW);
+      digitalWrite(enableMotor2, LOW);
     }
   }
 }
